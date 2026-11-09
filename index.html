@@ -1,167 +1,444 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI & Critical Thinking — Опрос</title>
+<title>AI Usage and Critical Thinking Among Students</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{color-scheme:dark;--bg:#0b0b12;--panel:#151521;--line:#29293a;--text:#f4f3fa;--muted:#aaa8bd;--accent:#a78bfa;--accent2:#7c3aed}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#21183b 0,#0b0b12 55%);color:var(--text);font:16px/1.55 Inter,system-ui,Arial,sans-serif;padding:28px 16px}
-main{max-width:760px;margin:auto}.hero{padding:26px 0 18px}.eyebrow{color:#c4b5fd;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700}
-h1{font-size:clamp(30px,6vw,46px);line-height:1.08;margin:12px 0}p{color:var(--muted)}.intro{font-size:17px;max-width:680px}
-.notice{background:#171426;border:1px solid #45336b;border-radius:14px;padding:14px 16px;color:#d8d1eb;margin:18px 0}
-form{display:grid;gap:14px}.card{background:rgba(21,21,33,.96);border:1px solid var(--line);border-radius:16px;padding:20px}
-h2{font-size:18px;margin:0 0 14px}.qnum{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.1em;margin-bottom:7px}
-.options{display:grid;gap:10px}.option{display:flex;gap:10px;align-items:flex-start;background:#1c1c2b;border:1px solid #303044;border-radius:11px;padding:11px 12px;cursor:pointer;color:#e9e7f2}
-.option:has(input:checked){border-color:var(--accent);background:#28203e}.option input{accent-color:var(--accent);margin-top:5px}
-select{width:100%;background:#1c1c2b;color:var(--text);border:1px solid #39394e;border-radius:10px;padding:12px;font:inherit}
-.actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}button{background:linear-gradient(135deg,#a78bfa,#7c3aed);border:0;color:white;font:700 16px inherit;padding:14px 22px;border-radius:12px;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
-#status{color:var(--muted);min-height:24px}.fine{font-size:13px}.success{color:#86efac!important}.error{color:#fca5a5!important}
-footer{color:#77758a;font-size:12px;padding:24px 0;text-align:center}
+:root {
+  color-scheme: dark;
+  --bg: #0b0b12;
+  --panel: #151521;
+  --line: #29293a;
+  --text: #f4f3fa;
+  --muted: #aaa8bd;
+  --accent: #a78bfa;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top,#21183b 0,#0b0b12 55%);
+  color: var(--text);
+  font: 16px/1.55 Inter,system-ui,Arial,sans-serif;
+  padding: 28px 16px;
+}
+
+main { max-width: 760px; margin: auto; }
+.hero { padding: 26px 0 18px; }
+
+.eyebrow {
+  color: #c4b5fd;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(30px,6vw,46px);
+  line-height: 1.08;
+  margin: 12px 0;
+}
+
+p { color: var(--muted); }
+.intro { font-size: 17px; max-width: 680px; }
+
+.notice {
+  background: #171426;
+  border: 1px solid #45336b;
+  border-radius: 14px;
+  padding: 14px 16px;
+  color: #d8d1eb;
+  margin: 18px 0;
+}
+
+form { display: grid; gap: 14px; }
+
+.card {
+  background: rgba(21,21,33,.96);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+h2 { font-size: 18px; margin: 0 0 14px; }
+
+.qnum {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  margin-bottom: 7px;
+}
+
+.options { display: grid; gap: 10px; }
+
+.option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #1c1c2b;
+  border: 1px solid #303044;
+  border-radius: 11px;
+  padding: 11px 12px;
+  cursor: pointer;
+  color: #e9e7f2;
+}
+
+.option:has(input:checked) {
+  border-color: var(--accent);
+  background: #28203e;
+}
+
+.option input {
+  accent-color: var(--accent);
+  margin-top: 5px;
+}
+
+select {
+  width: 100%;
+  background: #1c1c2b;
+  color: var(--text);
+  border: 1px solid #39394e;
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+}
+
+.field-label {
+  display: block;
+  margin: 14px 0 8px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+button {
+  background: linear-gradient(135deg,#a78bfa,#7c3aed);
+  border: 0;
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+button:disabled { opacity: .6; cursor: wait; }
+
+#status { color: var(--muted); min-height: 24px; }
+.fine { font-size: 13px; }
+.success { color: #86efac !important; }
+.error { color: #fca5a5 !important; }
+
+footer {
+  color: #77758a;
+  font-size: 12px;
+  padding: 24px 0;
+  text-align: center;
+}
 </style>
 </head>
+
 <body>
 <main>
+
 <header class="hero">
-<div class="eyebrow">Student research · Anonymous survey</div>
-<h1>AI & Critical Thinking</h1>
-<p class="intro">Как использование инструментов искусственного интеллекта связано с критическим мышлением старшеклассников?</p>
-<div class="notice">Опрос добровольный и анонимный. Не указывай имя, школу, телефон или другие личные данные. Ответы будут анализироваться только в обобщённом виде. Можно пропустить необязательные вопросы и прекратить участие до отправки.</div>
-<p class="fine">Если тебе нет 18 лет, перед участием убедись, что получено необходимое разрешение родителей и/или школы/научного руководителя.</p>
+  <div class="eyebrow">Student Research · Anonymous Survey</div>
+  <h1>AI & Critical Thinking</h1>
+
+  <p class="intro">
+    Как использование искусственного интеллекта связано
+    с критическим мышлением школьников и студентов университетов?
+  </p>
+
+  <div class="notice">
+    Опрос добровольный и анонимный. Не указывай имя, университет,
+    школу, телефон или другие личные данные. Ответы будут
+    анализироваться только в обобщённом виде. Ты можешь прекратить
+    участие до отправки формы.
+  </div>
+
+  <p class="fine">
+    Если тебе нет 18 лет, перед участием убедись, что получено
+    необходимое разрешение родителей и/или школы или научного руководителя.
+  </p>
 </header>
+
 <form id="survey">
+
 <section class="card">
-<div class="qnum">01</div><h2>Сколько тебе лет?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="age" value="14" required>14</label>
-<label class="option"><input type="radio" name="age" value="15">15</label>
-<label class="option"><input type="radio" name="age" value="16">16</label>
-<label class="option"><input type="radio" name="age" value="17">17</label>
-<label class="option"><input type="radio" name="age" value="18">18</label>
-</div></section>
-<section class="card"><div class="qnum">02</div><h2>В каком ты классе?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="grade" value="8" required>8</label>
-<label class="option"><input type="radio" name="grade" value="9">9</label>
-<label class="option"><input type="radio" name="grade" value="10">10</label>
-<label class="option"><input type="radio" name="grade" value="11">11</label>
-<label class="option"><input type="radio" name="grade" value="12">12</label>
-</div></section>
-<section class="card"><div class="qnum">03</div><h2>Как часто ты используешь ИИ-инструменты?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="frequency" value="Каждый день" required>Каждый день</label>
-<label class="option"><input type="radio" name="frequency" value="Несколько раз в неделю">Несколько раз в неделю</label>
-<label class="option"><input type="radio" name="frequency" value="Несколько раз в месяц">Несколько раз в месяц</label>
-<label class="option"><input type="radio" name="frequency" value="Редко или никогда">Редко или никогда</label>
-</div></section>
-<section class="card"><div class="qnum">04</div><h2>Какими ИИ-инструментами ты пользуешься? (Можно выбрать несколько)</h2>
-<div class="options">
-<label class="option"><input type="checkbox" name="tools" value="ChatGPT">ChatGPT</label>
-<label class="option"><input type="checkbox" name="tools" value="Gemini">Gemini</label>
-<label class="option"><input type="checkbox" name="tools" value="Claude">Claude</label>
-<label class="option"><input type="checkbox" name="tools" value="Copilot">Copilot</label>
-<label class="option"><input type="checkbox" name="tools" value="Другие">Другие</label>
-<label class="option"><input type="checkbox" name="tools" value="Не использую">Не использую</label>
-</div></section>
-<section class="card"><div class="qnum">05</div><h2>Для чего ты чаще всего используешь ИИ? (Можно выбрать несколько)</h2>
-<div class="options">
-<label class="option"><input type="checkbox" name="purpose" value="Домашние задания">Домашние задания</label>
-<label class="option"><input type="checkbox" name="purpose" value="Объяснение сложных тем">Объяснение сложных тем</label>
-<label class="option"><input type="checkbox" name="purpose" value="Написание текстов">Написание текстов</label>
-<label class="option"><input type="checkbox" name="purpose" value="Поиск и исследование информации">Поиск и исследование информации</label>
-<label class="option"><input type="checkbox" name="purpose" value="Программирование">Программирование</label>
-<label class="option"><input type="checkbox" name="purpose" value="Развлечения">Развлечения</label>
-<label class="option"><input type="checkbox" name="purpose" value="Другое">Другое</label>
-</div></section>
-<section class="card"><div class="qnum">06</div><h2>Как часто ты проверяешь точность ответа, который дал ИИ?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="verify" value="Всегда" required>Всегда</label>
-<label class="option"><input type="radio" name="verify" value="Часто">Часто</label>
-<label class="option"><input type="radio" name="verify" value="Иногда">Иногда</label>
-<label class="option"><input type="radio" name="verify" value="Редко или никогда">Редко или никогда</label>
-</div></section>
-<section class="card"><div class="qnum">07</div><h2>Что ты обычно делаешь первым, когда сталкиваешься со сложной учебной задачей?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="first_step" value="Сначала пытаюсь решить самостоятельно" required>Сначала пытаюсь решить самостоятельно</label>
-<label class="option"><input type="radio" name="first_step" value="Сразу спрашиваю ИИ">Сразу спрашиваю ИИ</label>
-<label class="option"><input type="radio" name="first_step" value="Ищу информацию в интернете">Ищу информацию в интернете</label>
-<label class="option"><input type="radio" name="first_step" value="Спрашиваю учителя или одноклассника">Спрашиваю учителя или одноклассника</label>
-</div></section>
-<section class="card"><div class="qnum">08</div><h2>Как часто ты задаёшь ИИ дополнительные вопросы или сомневаешься в его ответе?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="challenge" value="Очень часто" required>Очень часто</label>
-<label class="option"><input type="radio" name="challenge" value="Иногда">Иногда</label>
-<label class="option"><input type="radio" name="challenge" value="Редко">Редко</label>
-<label class="option"><input type="radio" name="challenge" value="Никогда">Никогда</label>
-</div></section>
-<section class="card"><div class="qnum">09</div><h2>Как, по твоему мнению, использование ИИ повлияло на то, как ты решаешь сложные задачи?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="change" value="Стал(а) чаще анализировать информацию" required>Стал(а) чаще анализировать информацию</label>
-<label class="option"><input type="radio" name="change" value="Стал(а) больше полагаться на готовые ответы">Стал(а) больше полагаться на готовые ответы</label>
-<label class="option"><input type="radio" name="change" value="Ничего не изменилось">Ничего не изменилось</label>
-<label class="option"><input type="radio" name="change" value="Затрудняюсь ответить">Затрудняюсь ответить</label>
-</div></section>
-<section class="card"><div class="qnum">10</div><h2>ИИ дал тебе ответ на важный вопрос, но не указал источники. Что ты скорее всего сделаешь?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="scenario1" value="Приму ответ, если он звучит убедительно" required>Приму ответ, если он звучит убедительно</label>
-<label class="option"><input type="radio" name="scenario1" value="Проверю информацию в других источниках">Проверю информацию в других источниках</label>
-<label class="option"><input type="radio" name="scenario1" value="Попрошу ИИ указать источники">Попрошу ИИ указать источники</label>
-<label class="option"><input type="radio" name="scenario1" value="Не буду использовать ответ">Не буду использовать ответ</label>
-</div></section>
-<section class="card"><div class="qnum">11</div><h2>Если два события происходят одновременно, означает ли это, что одно вызвало другое?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="scenario2" value="Да, всегда" required>Да, всегда</label>
-<label class="option"><input type="radio" name="scenario2" value="Не обязательно: это может быть совпадение или связь с третьим фактором">Не обязательно: это может быть совпадение или связь с третьим фактором</label>
-<label class="option"><input type="radio" name="scenario2" value="Не знаю">Не знаю</label>
-</div></section>
-<section class="card"><div class="qnum">12</div><h2>Два сайта дают противоречивую информацию. Как ты поступишь?</h2>
-<div class="options">
-<label class="option"><input type="radio" name="scenario3" value="Выберу тот сайт, который выглядит убедительнее" required>Выберу тот сайт, который выглядит убедительнее</label>
-<label class="option"><input type="radio" name="scenario3" value="Проверю авторов, даты и подтверждения из других источников">Проверю авторов, даты и подтверждения из других источников</label>
-<label class="option"><input type="radio" name="scenario3" value="Приму информацию с первого сайта">Приму информацию с первого сайта</label>
-<label class="option"><input type="radio" name="scenario3" value="Не буду разбираться">Не буду разбираться</label>
-</div></section>
-<section class="card">
-<h2>Согласие на участие</h2>
-<label class="option"><input type="checkbox" id="consent" required>Я прочитал(а) информацию выше, добровольно соглашаюсь участвовать и понимаю, что мои ответы будут использованы в обобщённом виде для учебного исследования.</label>
-<p class="fine">Все вопросы обязательны, кроме выбора нескольких вариантов в вопросах 4 и 5. Не отправляй форму, если не хочешь участвовать.</p>
-<div class="actions"><button id="submit" type="submit">Отправить ответы</button><span id="status" role="status"></span></div>
+  <div class="qnum">01</div>
+  <h2>Сколько тебе лет?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="age" value="14" required>14</label>
+    <label class="option"><input type="radio" name="age" value="15">15</label>
+    <label class="option"><input type="radio" name="age" value="16">16</label>
+    <label class="option"><input type="radio" name="age" value="17">17</label>
+    <label class="option"><input type="radio" name="age" value="18">18</label>
+    <label class="option"><input type="radio" name="age" value="19–21">19–21</label>
+    <label class="option"><input type="radio" name="age" value="22–25">22–25</label>
+    <label class="option"><input type="radio" name="age" value="26+">26 и старше</label>
+  </div>
 </section>
+
+<section class="card">
+  <div class="qnum">02</div>
+  <h2>Где ты сейчас учишься?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="education_level" value="Средняя школа" required>Средняя школа</label>
+    <label class="option"><input type="radio" name="education_level" value="Старшая школа">Старшая школа</label>
+    <label class="option"><input type="radio" name="education_level" value="Университет">Университет</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">03</div>
+  <h2>В каком классе или на каком курсе ты учишься?</h2>
+
+  <label class="field-label" for="grade">Класс (для школьников)</label>
+  <select id="grade" name="grade">
+    <option value="">Не применимо</option>
+    <option value="8">8 класс</option>
+    <option value="9">9 класс</option>
+    <option value="10">10 класс</option>
+    <option value="11">11 класс</option>
+    <option value="12">12 класс</option>
+  </select>
+
+  <label class="field-label" for="study_year">Курс (для студентов университета)</label>
+  <select id="study_year" name="study_year">
+    <option value="">Не применимо</option>
+    <option value="1">1 курс</option>
+    <option value="2">2 курс</option>
+    <option value="3">3 курс</option>
+    <option value="4">4 курс</option>
+    <option value="5+">5 курс и выше</option>
+  </select>
+</section>
+
+<section class="card">
+  <div class="qnum">04</div>
+  <h2>Как часто ты используешь ИИ-инструменты?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="frequency" value="Каждый день" required>Каждый день</label>
+    <label class="option"><input type="radio" name="frequency" value="Несколько раз в неделю">Несколько раз в неделю</label>
+    <label class="option"><input type="radio" name="frequency" value="Несколько раз в месяц">Несколько раз в месяц</label>
+    <label class="option"><input type="radio" name="frequency" value="Редко или никогда">Редко или никогда</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">05</div>
+  <h2>Какими ИИ-инструментами ты пользуешься? (Можно выбрать несколько)</h2>
+  <div class="options">
+    <label class="option"><input type="checkbox" name="tools" value="ChatGPT">ChatGPT</label>
+    <label class="option"><input type="checkbox" name="tools" value="Gemini">Gemini</label>
+    <label class="option"><input type="checkbox" name="tools" value="Claude">Claude</label>
+    <label class="option"><input type="checkbox" name="tools" value="Copilot">Copilot</label>
+    <label class="option"><input type="checkbox" name="tools" value="Другие">Другие</label>
+    <label class="option"><input type="checkbox" name="tools" value="Не использую">Не использую</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">06</div>
+  <h2>Для чего ты чаще всего используешь ИИ? (Можно выбрать несколько)</h2>
+  <div class="options">
+    <label class="option"><input type="checkbox" name="purpose" value="Домашние задания">Домашние задания</label>
+    <label class="option"><input type="checkbox" name="purpose" value="Объяснение сложных тем">Объяснение сложных тем</label>
+    <label class="option"><input type="checkbox" name="purpose" value="Написание текстов">Написание текстов</label>
+    <label class="option"><input type="checkbox" name="purpose" value="Поиск и исследование информации">Поиск и исследование информации</label>
+    <label class="option"><input type="checkbox" name="purpose" value="Программирование">Программирование</label>
+    <label class="option"><input type="checkbox" name="purpose" value="Развлечения">Развлечения</label>
+    <label class="option"><input type="checkbox" name="purpose" value="Другое">Другое</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">07</div>
+  <h2>Как часто ты проверяешь точность ответа, который дал ИИ?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="verify" value="Всегда" required>Всегда</label>
+    <label class="option"><input type="radio" name="verify" value="Часто">Часто</label>
+    <label class="option"><input type="radio" name="verify" value="Иногда">Иногда</label>
+    <label class="option"><input type="radio" name="verify" value="Редко или никогда">Редко или никогда</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">08</div>
+  <h2>Что ты обычно делаешь первым, когда сталкиваешься со сложной учебной задачей?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="first_step" value="Сначала пытаюсь решить самостоятельно" required>Сначала пытаюсь решить самостоятельно</label>
+    <label class="option"><input type="radio" name="first_step" value="Сразу спрашиваю ИИ">Сразу спрашиваю ИИ</label>
+    <label class="option"><input type="radio" name="first_step" value="Ищу информацию в интернете">Ищу информацию в интернете</label>
+    <label class="option"><input type="radio" name="first_step" value="Спрашиваю учителя или другого человека">Спрашиваю учителя или другого человека</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">09</div>
+  <h2>Как часто ты задаёшь ИИ дополнительные вопросы или сомневаешься в его ответе?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="challenge" value="Очень часто" required>Очень часто</label>
+    <label class="option"><input type="radio" name="challenge" value="Иногда">Иногда</label>
+    <label class="option"><input type="radio" name="challenge" value="Редко">Редко</label>
+    <label class="option"><input type="radio" name="challenge" value="Никогда">Никогда</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">10</div>
+  <h2>Как, по твоему мнению, использование ИИ повлияло на то, как ты решаешь сложные задачи?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="change" value="Стал(а) чаще анализировать информацию" required>Стал(а) чаще анализировать информацию</label>
+    <label class="option"><input type="radio" name="change" value="Стал(а) больше полагаться на готовые ответы">Стал(а) больше полагаться на готовые ответы</label>
+    <label class="option"><input type="radio" name="change" value="Ничего не изменилось">Ничего не изменилось</label>
+    <label class="option"><input type="radio" name="change" value="Затрудняюсь ответить">Затрудняюсь ответить</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">11</div>
+  <h2>ИИ дал тебе ответ на важный вопрос, но не указал источники. Что ты скорее всего сделаешь?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="scenario1" value="Приму ответ, если он звучит убедительно" required>Приму ответ, если он звучит убедительно</label>
+    <label class="option"><input type="radio" name="scenario1" value="Проверю информацию в других источниках">Проверю информацию в других источниках</label>
+    <label class="option"><input type="radio" name="scenario1" value="Попрошу ИИ указать источники">Попрошу ИИ указать источники</label>
+    <label class="option"><input type="radio" name="scenario1" value="Не буду использовать ответ">Не буду использовать ответ</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">12</div>
+  <h2>Если два события происходят одновременно, означает ли это, что одно вызвало другое?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="scenario2" value="Да, всегда" required>Да, всегда</label>
+    <label class="option"><input type="radio" name="scenario2" value="Не обязательно: это может быть совпадение или связь с третьим фактором">Не обязательно: это может быть совпадение или связь с третьим фактором</label>
+    <label class="option"><input type="radio" name="scenario2" value="Не знаю">Не знаю</label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="qnum">13</div>
+  <h2>Два сайта дают противоречивую информацию. Как ты поступишь?</h2>
+  <div class="options">
+    <label class="option"><input type="radio" name="scenario3" value="Выберу тот сайт, который выглядит убедительнее" required>Выберу тот сайт, который выглядит убедительнее</label>
+    <label class="option"><input type="radio" name="scenario3" value="Проверю авторов, даты и подтверждения из других источников">Проверю авторов, даты и подтверждения из других источников</label>
+    <label class="option"><input type="radio" name="scenario3" value="Приму информацию с первого сайта">Приму информацию с первого сайта</label>
+    <label class="option"><input type="radio" name="scenario3" value="Не буду разбираться">Не буду разбираться</label>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Согласие на участие</h2>
+  <label class="option">
+    <input type="checkbox" id="consent" required>
+    Я прочитал(а) информацию выше, добровольно соглашаюсь участвовать и понимаю, что мои ответы будут использованы в обобщённом виде для учебного исследования.
+  </label>
+
+  <p class="fine">
+    Все вопросы обязательны, кроме выбора нескольких вариантов в вопросах 5 и 6 и уточнения класса или курса.
+  </p>
+
+  <div class="actions">
+    <button id="submit" type="submit">Отправить ответы</button>
+    <span id="status" role="status"></span>
+  </div>
+</section>
+
 </form>
-<footer>Учебное исследование · AI & Critical Thinking</footer>
+
+<footer>Student Research · AI & Critical Thinking</footer>
 </main>
+
 <script>
 const SUPABASE_URL = "https://mwimvucmhpiysdbqjlkf.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_a6kUGAKwFQ8YQhtyS73avA_MTRo6Fg5";
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
 const form = document.getElementById("survey");
 const statusEl = document.getElementById("status");
 const button = document.getElementById("submit");
-const one = name => form.querySelector(`input[name="${name}"]:checked`)?.value ?? null;
-const many = name => [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(x => x.value);
+
+const one = name =>
+  form.querySelector(`input[name="${name}"]:checked`)?.value ?? null;
+
+const many = name =>
+  [...form.querySelectorAll(`input[name="${name}"]:checked`)]
+  .map(x => x.value);
+
 form.addEventListener("submit", async event => {
   event.preventDefault();
+
   if (!form.reportValidity()) return;
   if (!document.getElementById("consent").checked) return;
+
+  const level = one("education_level");
+  const grade = document.getElementById("grade").value || null;
+  const studyYear = document.getElementById("study_year").value || null;
+
+  if (
+    (level === "Университет" && !studyYear) ||
+    (level !== "Университет" && !grade)
+  ) {
+    statusEl.className = "error";
+    statusEl.textContent =
+      "Пожалуйста, укажи свой класс или курс университета.";
+    return;
+  }
+
   button.disabled = true;
   statusEl.className = "";
   statusEl.textContent = "Отправляем ответы…";
+
   const row = {
-    age: one("age"), grade: one("grade"), frequency: one("frequency"),
-    tools: many("tools"), purpose: many("purpose"), verify: one("verify"),
-    first_step: one("first_step"), challenge: one("challenge"), change: one("change"),
-    scenario1: one("scenario1"), scenario2: one("scenario2"), scenario3: one("scenario3")
+    age: one("age"),
+    education_level: level,
+    grade: level === "Университет" ? null : grade,
+    study_year: level === "Университет" ? studyYear : null,
+    frequency: one("frequency"),
+    tools: many("tools"),
+    purpose: many("purpose"),
+    verify: one("verify"),
+    first_step: one("first_step"),
+    challenge: one("challenge"),
+    change: one("change"),
+    scenario1: one("scenario1"),
+    scenario2: one("scenario2"),
+    scenario3: one("scenario3")
   };
-  const { error } = await client.from("survey_responses").insert([row]);
+
+  const { error } = await client
+    .from("survey_responses")
+    .insert([row]);
+
   button.disabled = false;
+
   if (error) {
     statusEl.className = "error";
-    statusEl.textContent = "Не удалось отправить ответы. Попробуй позже или сообщи организатору.";
+    statusEl.textContent =
+      "Не удалось отправить ответы. Попробуй позже или сообщи организатору.";
     console.error(error);
   } else {
     statusEl.className = "success";
-    statusEl.textContent = "Спасибо! Твои ответы успешно отправлены.";
+    statusEl.textContent =
+      "Спасибо! Твои ответы успешно отправлены.";
     form.reset();
     button.disabled = true;
   }
