@@ -219,10 +219,10 @@ footer {
   <label class="field-label" for="study_year">Курс (для студентов университета)</label>
   <select id="study_year" name="study_year">
     <option value="">Не применимо</option>
-    <option value="1">1 курс</option>
-    <option value="2">2 курс</option>
-    <option value="3">3 курс</option>
-    <option value="4">4 курс</option>
+    <option value="1">1 курс — первокурсник</option>
+    <option value="2">2 курс — второкурсник</option>
+    <option value="3">3 курс — третьекурсник</option>
+    <option value="4">4 курс — четверокурсник</option>
     <option value="5+">5 курс и выше</option>
   </select>
 </section>
@@ -424,23 +424,25 @@ form.addEventListener("submit", async event => {
     scenario3: one("scenario3")
   };
 
-  const { error } = await client
-    .from("survey_responses")
-    .insert([row]);
+  try {
+    const { error } = await client
+      .from("survey_responses")
+      .insert([row]);
 
-  button.disabled = false;
+    if (error) throw error;
 
-  if (error) {
-    statusEl.className = "error";
-    statusEl.textContent =
-      "Не удалось отправить ответы. Попробуй позже или сообщи организатору.";
-    console.error(error);
-  } else {
     statusEl.className = "success";
     statusEl.textContent =
       "Спасибо! Твои ответы успешно отправлены.";
     form.reset();
     button.disabled = true;
+
+  } catch (error) {
+    statusEl.className = "error";
+    statusEl.textContent =
+      "Не удалось отправить ответы. Попробуй позже или сообщи организатору.";
+    console.error(error);
+    button.disabled = false;
   }
 });
 </script>
